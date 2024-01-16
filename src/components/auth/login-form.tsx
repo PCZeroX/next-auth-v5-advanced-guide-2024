@@ -12,6 +12,7 @@ import { login } from "@/actions/login";
 import { LoginSchema } from "@/schemas";
 
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -20,7 +21,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Button } from "@/components/ui/button";
 
 import { CardWrapper } from "@/components/auth/card-wrapper";
 
@@ -36,8 +36,8 @@ export const LoginForm = () => {
       : "";
 
   const [showTwoFactor, setShowTwoFactor] = useState(false);
-  const [error, setError] = useState<string | undefined>("");
-  const [success, setSuccess] = useState<string | undefined>("");
+  const [error, setError] = useState<string | undefined>(undefined);
+  const [success, setSuccess] = useState<string>();
   const [isPending, startTransition] = useTransition();
 
   const form = useForm<z.infer<typeof LoginSchema>>({
@@ -54,7 +54,14 @@ export const LoginForm = () => {
 
     startTransition(() => {
       login(values).then((data) => {
-        setError(data?.error);
+        if (data?.error) {
+          form.reset({
+            email: values.email,
+            password: "",
+          });
+          setError(data?.error);
+        }
+        // T O D O: Add when we add 2FA
         // setSuccess(data?.success);
       });
       // login(values, callbackUrl)
