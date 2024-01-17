@@ -49,17 +49,18 @@ export const {
         },
       };
     },
+
     async signIn({ user, account }) {
       console.log("user:", user);
       console.log("account:", account);
 
-      // // Allow OAuth without email verification
-      // if (account?.provider !== "credentials") return true;
+      // Allow OAuth without email verification
+      if (account?.provider !== "credentials") return true;
 
-      // const existingUser = await getUserById(user.id);
+      const existingUser = await getUserById(user.id);
 
-      // // Prevent sign in without email verification
-      // if (!existingUser?.emailVerified) return false;
+      // Prevent sign in without email verification
+      if (!existingUser?.emailVerified) return false;
 
       // if (existingUser.isTwoFactorEnabled) {
       //   const twoFactorConfirmation = await getTwoFactorConfirmationByUserId(

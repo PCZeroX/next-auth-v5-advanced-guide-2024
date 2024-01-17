@@ -27,8 +27,8 @@ import { FormSuccess } from "@/components/common/form-success";
 import { Button } from "@/components/ui/button";
 
 export const RegisterForm = () => {
-  const [error, setError] = useState<string | undefined>("");
-  const [success, setSuccess] = useState<string | undefined>("");
+  const [error, setError] = useState<string>();
+  const [success, setSuccess] = useState<string>();
   const [isPending, startTransition] = useTransition();
 
   const form = useForm<z.infer<typeof RegisterSchema>>({

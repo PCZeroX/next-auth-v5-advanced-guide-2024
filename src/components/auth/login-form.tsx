@@ -62,7 +62,7 @@ export const LoginForm = () => {
           setError(data?.error);
         }
         // T O D O: Add when we add 2FA
-        // setSuccess(data?.success);
+        setSuccess(data?.success);
       });
       // login(values, callbackUrl)
       //   .then((data) => {
