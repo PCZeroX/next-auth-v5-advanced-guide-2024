@@ -25,11 +25,13 @@ import { FormError } from "@/components/common/form-error";
 import { FormSuccess } from "@/components/common/form-success";
 
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 export const RegisterForm = () => {
   const [error, setError] = useState<string>();
   const [success, setSuccess] = useState<string>();
   const [isPending, startTransition] = useTransition();
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof RegisterSchema>>({
     resolver: zodResolver(RegisterSchema),
@@ -48,6 +50,10 @@ export const RegisterForm = () => {
       register(values).then((data) => {
         setError(data.error);
         setSuccess(data.success);
+
+        setTimeout(() => {
+          router.push("/auth/login");
+        }, 5000);
       });
     });
   };
