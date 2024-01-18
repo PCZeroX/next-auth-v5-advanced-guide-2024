@@ -53,32 +53,23 @@ export const LoginForm = () => {
     setSuccess("");
 
     startTransition(() => {
-      login(values).then((data) => {
-        if (data?.error) {
-          form.reset({
-            email: values.email,
-            password: "",
-          });
-          setError(data?.error);
-        }
-        // T O D O: Add when we add 2FA
-        setSuccess(data?.success);
-      });
-      // login(values, callbackUrl)
-      //   .then((data) => {
-      //     if (data?.error) {
-      //       form.reset();
-      //       setError(data.error);
-      //     }
-      //     if (data?.success) {
-      //       form.reset();
-      //       setSuccess(data.success);
-      //     }
-      //     if (data?.twoFactor) {
-      //       setShowTwoFactor(true);
-      //     }
-      //   })
-      //   .catch(() => setError("Something went wrong"));
+      login(values, callbackUrl)
+        .then((data) => {
+          if (data?.error) {
+            form.reset();
+            setError(data.error);
+          }
+
+          if (data?.success) {
+            form.reset();
+            setSuccess(data.success);
+          }
+
+          if (data?.twoFactor) {
+            setShowTwoFactor(true);
+          }
+        })
+        .catch(() => setError("Something went wrong"));
     });
   };
 
