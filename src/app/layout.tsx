@@ -6,6 +6,8 @@ import { SessionProvider } from "next-auth/react";
 
 import { auth } from "@/auth";
 
+import { Toaster } from "@/components/ui/sonner";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -25,7 +27,17 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
   return (
     <SessionProvider session={session}>
       <html lang="en">
-        <body className={inter.className}>{children}</body>
+        <body className={inter.className}>
+          <Toaster
+          // toastOptions={{
+          //   style: {
+          //     backgroundColor: "#000",
+          //     color: "#fff",
+          //   },
+          // }}
+          />
+          {children}
+        </body>
       </html>
     </SessionProvider>
   );
