@@ -25,7 +25,7 @@ const HomePage = () => {
         </h1>
         <p className="text-white text-lg">A simple authentication service</p>
         <div>
-          <LoginButton>
+          <LoginButton asChild>
             <Button variant="secondary" size="lg">
               Sign in
             </Button>
