@@ -9,9 +9,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { SettingsSchema } from "@/schemas";
 
+import { settings } from "@/actions/settings";
+
 import { useCurrentUser } from "@/hooks/use-current-user";
 
 import { Input } from "@/components/ui/input";
+import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import {
@@ -28,6 +31,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
+  FormDescription,
 } from "@/components/ui/form";
 
 import { FormError } from "@/components/common/form-error";
@@ -48,24 +52,24 @@ const SettingsPage = () => {
       newPassword: undefined,
       name: user?.name ?? undefined,
       email: user?.email ?? undefined,
-      // role: user?.role ?? undefined,
-      // isTwoFactorEnabled: user?.isTwoFactorEnabled ?? undefined,
+      role: user?.role ?? undefined,
+      isTwoFactorEnabled: user?.isTwoFactorEnabled ?? undefined,
     },
   });
 
   const onSubmit = (values: z.infer<typeof SettingsSchema>) => {
     startTransition(() => {
-      // settings(values)
-      //   .then((data) => {
-      //     if (data.error) {
-      //       setError(data.error);
-      //     }
-      //     if (data.success) {
-      //       update();
-      //       setSuccess(data.success);
-      //     }
-      //   })
-      //   .catch(() => setError("Something went wrong!"));
+      settings(values)
+        .then((data) => {
+          if (data.error) {
+            setError(data.error);
+          }
+          if (data.success) {
+            update();
+            setSuccess(data.success);
+          }
+        })
+        .catch(() => setError("Something went wrong!"));
     });
   };
 
@@ -96,6 +100,68 @@ const SettingsPage = () => {
                 )}
               />
 
+              {user?.isOAuth === false && (
+                <>
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Email</FormLabel>
+                        <FormControl>
+                          <Input
+                            {...field}
+                            placeholder="john.doe@example.com"
+                            type="email"
+                            autoComplete="email"
+                            disabled={isPending}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Password</FormLabel>
+                        <FormControl>
+                          <Input
+                            {...field}
+                            placeholder="******"
+                            type="password"
+                            autoComplete="current-password"
+                            disabled={isPending}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="newPassword"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>New Password</FormLabel>
+                        <FormControl>
+                          <Input
+                            {...field}
+                            placeholder="******"
+                            type="password"
+                            autoComplete="current-new-password"
+                            disabled={isPending}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </>
+              )}
+
               <FormField
                 control={form.control}
                 name="role"
@@ -121,6 +187,30 @@ const SettingsPage = () => {
                   </FormItem>
                 )}
               />
+
+              {user?.isOAuth === false && (
+                <FormField
+                  control={form.control}
+                  name="isTwoFactorEnabled"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
+                      <div className="space-y-0.5">
+                        <FormLabel>Two Factor Authentication</FormLabel>
+                        <FormDescription>
+                          Enable two factor authentication for your account
+                        </FormDescription>
+                      </div>
+                      <FormControl>
+                        <Switch
+                          disabled={isPending}
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+              )}
             </div>
             <FormError message={error} />
             <FormSuccess message={success} />
